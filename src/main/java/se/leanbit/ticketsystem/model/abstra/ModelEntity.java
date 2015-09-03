@@ -9,7 +9,7 @@ public abstract class ModelEntity
 {
 	@Id
 	@GeneratedValue
-	private Long id;
+	private long id;
 	
 	protected ModelEntity(){}
 	public ModelEntity(Long id)

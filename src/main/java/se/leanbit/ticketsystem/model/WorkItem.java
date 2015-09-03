@@ -20,7 +20,10 @@ public class WorkItem extends ModelEntity
     private Issue issue;
 
     protected WorkItem(){}
-    public WorkItem(String name, String description, String status, int priority)
+    public WorkItem(final String name,
+                    final String description,
+                    final String status,
+                    final int priority)
     {
         this.name = name;
         this.description = description;
@@ -30,40 +33,40 @@ public class WorkItem extends ModelEntity
 
     public String getName()
     {
-        return name;
+        return this.name;
     }
 
-    public void setName(String name)
+    public void setName(final String name)
     {
         this.name = name;
     }
 
     public String getDescription()
     {
-        return description;
+        return this.description;
     }
 
-    public void setDescription(String description)
+    public void setDescription(final String description)
     {
         this.description = description;
     }
 
     public String getStatus()
     {
-        return status;
+        return this.status;
     }
 
-    public void setStatus(String status)
+    public void setStatus(final String status)
     {
         this.status = status;
     }
 
     public int getPriority()
     {
-        return priority;
+        return this.priority;
     }
 
-    public void setPriority(int priority)
+    public void setPriority(final int priority)
     {
         this.priority = priority;
     }

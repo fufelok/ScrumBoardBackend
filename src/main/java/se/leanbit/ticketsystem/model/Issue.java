@@ -17,7 +17,7 @@ public class Issue extends ModelEntity
     private int priority;
 
     protected Issue(){}
-    public Issue(String name, String description, int priority)
+    public Issue(final String name, final String description, final int priority)
     {
         this.name = name;
         this.description = description;
@@ -26,30 +26,30 @@ public class Issue extends ModelEntity
 
     public String getName()
     {
-        return name;
+        return this.name;
     }
 
-    public void setName(String name)
+    public void setName(final String name)
     {
         this.name = name;
     }
 
     public String getDescription()
     {
-        return description;
+        return this.description;
     }
 
-    public void setDescription(String description)
+    public void setDescription(final String description)
     {
         this.description = description;
     }
 
     public int getPriority()
     {
-        return priority;
+        return this.priority;
     }
 
-    public void setPriority(int priority)
+    public void setPriority(final int priority)
     {
         this.priority = priority;
     }

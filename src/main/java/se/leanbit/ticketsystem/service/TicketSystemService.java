@@ -14,8 +14,10 @@ import se.leanbit.ticketsystem.service.interfaces.WorkItemServiceInterface;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TicketSystemService
-		implements UserServiceInterface, TeamServiceInterface, WorkItemServiceInterface, IssueServiceInterface
+public class TicketSystemService implements UserServiceInterface,
+											TeamServiceInterface,
+                                            WorkItemServiceInterface,
+                                            IssueServiceInterface
 {
 	@Autowired
 	UserService userService;
@@ -26,17 +28,16 @@ public class TicketSystemService
 	@Autowired
 	IssueService issueService;
 
-	public TicketSystemService()
-	{
-	}
+	public TicketSystemService(){}
 
-	// user service methods
+	// User service methods
 	public User addUser(final User user)
 	{
 		if (null != user)
 		{
 			return userService.addUser(user);
-		} else
+		}
+        else
 		{
 			throw new TicketSystemServiceExcption("addUser: Cannot add an empty user!");
 		}
@@ -44,7 +45,22 @@ public class TicketSystemService
 
 	public User getUserWithID(final String userID)
 	{
-		return userService.getUserWithID(userID);
+        if(!userID.isEmpty())
+        {
+            final User user = userService.getUserWithID(userID);
+            if(null != user)
+            {
+                return user;
+            }
+            else
+            {
+                throw new TicketSystemServiceExcption("Cannot get user: No existing user with ID: " + user.getUserID());
+            }
+        }
+        else
+        {
+            throw new TicketSystemServiceExcption("Cannot get user: empty string!");
+        }
 	}
 
 	public User updateUser(final User user)
@@ -54,11 +70,13 @@ public class TicketSystemService
 			if (null != getUserWithID(user.getUserID()))
 			{
 				return userService.updateUser(user);
-			} else
-			{
-				throw new TicketSystemServiceExcption("Cannot update user: No user with that userID exists!");
 			}
-		} else
+            else
+			{
+                throw new TicketSystemServiceExcption("Cannot update user: No existing user with ID: " + user.getUserID());
+			}
+		}
+        else
 		{
 			throw new TicketSystemServiceExcption("Cannot update a user with an empty object!");
 		}
@@ -71,7 +89,8 @@ public class TicketSystemService
 			if (null != userService.getUserWithID(userID))
 			{
 				userService.removeUser(userID);
-			} else
+			}
+            else
 			{
 				throw new TicketSystemServiceExcption("Cannot remove user: No existing user with ID: " + userID);
 			}
@@ -108,26 +127,22 @@ public class TicketSystemService
 
 	public List<User> getUsersWithWorkItem(WorkItem workItem)
 	{
-		if (null != workItem)
-		{
-			return userService.getUsersWithWorkItem(workItem);
-		} else
-		{
-			throw new TicketSystemServiceExcption(
-					"Can't get users with workitem: can't get all users with an empty workItem object");
-		}
+        return userService.getUsersWithWorkItem(workItem);
 	}
 
-	// Team service methods
 
+
+
+	// Team service methods
 	public Team addTeam(final Team team)
 	{
 		if (null != team)
 		{
 			return teamService.addTeam(team);
-		} else
+		}
+        else
 		{
-			throw new TicketSystemServiceExcption("Can't add Team: can't add an empty object");
+			throw new TicketSystemServiceExcption("Cannot add Team: Cannot add an empty object!");
 		}
 	}
 
@@ -135,10 +150,19 @@ public class TicketSystemService
 	{
 		if (!teamName.isEmpty())
 		{
-			return teamService.getTeam(teamName);
-		} else
+            Team team = teamService.getTeam(teamName);
+            if(null != team)
+            {
+                return team;
+            }
+            else
+            {
+                throw new TicketSystemServiceExcption("Cannot getTeam: There is no team with the name \"" + teamName +"\"");
+            }
+		}
+        else
 		{
-			throw new TicketSystemServiceExcption("Can't find team: can't find team with that name " + teamName);
+			throw new TicketSystemServiceExcption("Cannot getTeam: Cannot get an empty object!");
 		}
 	}
 
@@ -149,13 +173,14 @@ public class TicketSystemService
 			if (null != teamService.getTeam(team.getTeamName()))
 			{
 				return teamService.updateTeam(team);
-			} else
+			}
+            else
 			{
-				throw new TicketSystemServiceExcption("can't update team: can't update an non existing team");
+				throw new TicketSystemServiceExcption("Cannot update Team: There is no team with the name \"" + team.getTeamName() +"\"");
 			}
 		} else
 		{
-			throw new TicketSystemServiceExcption("can't update team: can't update with an empty object");
+			throw new TicketSystemServiceExcption("Cannot update Team: Cannot update with an empty object!");
 		}
 	}
 
@@ -172,13 +197,14 @@ public class TicketSystemService
 					userService.updateUser(user);
 				}
 				teamService.removeTeam(teamName);
-			} else
+			}
+            else
 			{
-				throw new TicketSystemServiceExcption("Can't remove team: can't remove non existing team");
+				throw new TicketSystemServiceExcption("Cannot remove team: There is no team with the name \"" + teamName +"\"");
 			}
 		} else
 		{
-			throw new TicketSystemServiceExcption("Can't remove team: can't remove team with empty object");
+			throw new TicketSystemServiceExcption("Cannot remove Team: Cannot remove with an empty object!");
 		}
 	}
 
@@ -187,16 +213,19 @@ public class TicketSystemService
 		return teamService.getAllTeams();
 	}
 
-	// WorkItema service methods
 
+
+
+	// WorkItems service methods
 	public WorkItem addWorkItem(final WorkItem workItem)
 	{
 		if (null != workItem)
 		{
 			return workItemService.addWorkItem(workItem);
-		} else
+		}
+        else
 		{
-			throw new TicketSystemServiceExcption("Can't add workItem: can't add workItem with an empty object");
+			throw new TicketSystemServiceExcption("Cannot add WorkItem: Cannot add an empty object!");
 		}
 	}
 
@@ -204,11 +233,19 @@ public class TicketSystemService
 	{
 		if (!workItemName.isEmpty())
 		{
-			return workItemService.getWorkItem(workItemName);
-		} else
+            WorkItem workItem = workItemService.getWorkItem(workItemName);
+            if(null != workItem)
+            {
+                return workItem;
+            }
+            else
+            {
+                throw new TicketSystemServiceExcption("Cannot getWorkItem: There is no WorkItem with the name \"" + workItemName + "\"");
+            }
+		}
+        else
 		{
-			throw new TicketSystemServiceExcption(
-					"Can't get WorkItem: can't get WorkItem with non existing workItem name");
+			throw new TicketSystemServiceExcption("Cannot get WorkItem: can't get WorkItem with non existing workItem name");
 		}
 	}
 
@@ -219,13 +256,14 @@ public class TicketSystemService
 			if (null != workItemService.getWorkItem(workItem.getName()))
 			{
 				return workItemService.updateWorkItem(workItem);
-			} else
+			}
+            else
 			{
-				throw new TicketSystemServiceExcption("Can't update workItem: can't update an non existing workItem");
+				throw new TicketSystemServiceExcption("Cannot update workItem: There is no WorkItem with the name: \"" + workItem.getName() + "\"");
 			}
 		} else
 		{
-			throw new TicketSystemServiceExcption("Can't update workItem: can't update workItem with empty object");
+			throw new TicketSystemServiceExcption("Cannot update workItem: Cannot update WorkItem with an empty object!");
 		}
 	}
 
@@ -233,35 +271,87 @@ public class TicketSystemService
 	{
 		if (null != workItemService.getWorkItem(workItem.getName()))
 		{
-			List<User> workUsers = userService.getUsersWithWorkItem(workItem);
-			for (User user : workUsers)
-			{
-				user.removeWorkItem(workItem);
-				userService.updateUser(user);
-			}
-			workItemService.removeWorkItem(workItem);
+            if(null != getWorkItem(workItem.getName()))
+            {
+                List<User> workUsers = userService.getUsersWithWorkItem(workItem);
+                for (User user : workUsers)
+                {
+                    user.removeWorkItem(workItem);
+                    userService.updateUser(user);
+                }
+
+                workItemService.removeWorkItem(workItem);
+            }
+            else
+            {
+                throw new TicketSystemServiceExcption("Cannot remove WorkItem: There is no WorkItem with the name \"" + workItem.getName() + "\"");
+            }
+
 		} else
 		{
-			throw new TicketSystemServiceExcption("Can't remove workItem: can't remove workItem with empty object");
+			throw new TicketSystemServiceExcption("Cannot remove WorkItem: Cannot remove workItem with empty object");
 		}
 	}
 
 	public List<WorkItem> getWorkItemsFromTeam(final Team team)
 	{
-		List<User> users = getUsersByTeamName(team.getTeamName());
-		List<WorkItem> workItems = new ArrayList<>();
+        if(null != team)
+        {
+            if(null != getTeam(team.getTeamName()))
+            {
+                List<User> users = getUsersByTeamName(team.getTeamName());
+                List<WorkItem> workItems = new ArrayList<>();
 
-		for (User currentUser : users)
-		{
-			workItems.addAll(currentUser.getAllWorkItems());
-		}
-		return workItems;
+                for (User currentUser : users)
+                {
+                    workItems.addAll(currentUser.getAllWorkItems());
+                }
+                return workItems;
+            }
+            else
+            {
+                throw new TicketSystemServiceExcption("Cannot getWorkItems from team \"" + team.getTeamName() + "\": There is no such team.");
+            }
+        }
+        else
+        {
+            throw new TicketSystemServiceExcption("Cannot getWorkItems from team: Cannot get WorkItems from an empty Team!");
+        }
+
 	}
 
 	public User addWorkItemToUser(final User user, final WorkItem workItem)
 	{
-		user.addWorkItem(workItem);
-		return userService.updateUser(user);
+        if(null != user)
+        {
+            if(null != workItem)
+            {
+                if(null != getUserWithID(user.getUserID()))
+                {
+                    if(null != getWorkItem(workItem.getName()))
+                    {
+                        user.addWorkItem(workItem);
+                        return userService.updateUser(user);
+                    }
+                    else
+                    {
+                        throw new TicketSystemServiceExcption("Cannot addWorkItemToUser: There is no WorkItem with the name: "+workItem.getName());
+                    }
+                }
+                else
+                {
+                    throw new TicketSystemServiceExcption("Cannot addWorkItemToUser: There is no User with ID: "+user.getUserID());
+                }
+            }
+            else
+            {
+                throw new TicketSystemServiceExcption("Cannot addWorkItemToUser: Cannot add an empty WorkItem!");
+            }
+        }
+        else
+        {
+            throw new TicketSystemServiceExcption("Cannot addWorkItemToUser: The given User object is empty!");
+        }
 	}
 
 	public List<WorkItem> getAllWorkItems()
@@ -274,17 +364,18 @@ public class TicketSystemService
 		return workItemService.getWorkItemsWithIssue();
 	}
 
-	public List<WorkItem> getAllWorkItemsWithStatus(String status)
+	public List<WorkItem> getAllWorkItemsWithStatus(final String status)
 	{
 		return workItemService.getAllWorkItemsWithStatus(status);
 	}
 
-	public List<WorkItem> getWorkItemWithDescriptionLike(String description)
+	public List<WorkItem> getWorkItemWithDescriptionLike(final String description)
 	{
-		if (null != description)
+		if (!description.isEmpty())
 		{
 			return workItemService.getWorkItemWithDescriptionLike(description);
-		} else
+		}
+        else
 		{
 			throw new TicketSystemServiceExcption("Can't get workItem: can't get workItem with empty description");
 		}
@@ -292,14 +383,27 @@ public class TicketSystemService
 
 	public WorkItem changeWorkItemStatus(WorkItem workItem, String status)
 	{
-
-		if (null != workItem && null != status)
+		if (null != workItem)
 		{
-			return workItemService.changeWorkItemStatus(workItem, status);
-		} else
+            if(!status.isEmpty())
+            {
+                if(null != getWorkItem(workItem.getName()))
+                {
+                    return workItemService.changeWorkItemStatus(workItem, status);
+                }
+                else
+                {
+                    throw new TicketSystemServiceExcption("Cannot changeWorkItemStatus: There is no WorkItem with the name: " + workItem.getName());
+                }
+            }
+            else
+            {
+                throw new TicketSystemServiceExcption("Cannot changeWorkItemStatus: The given status object is empty!");
+            }
+		}
+        else
 		{
-			throw new TicketSystemServiceExcption(
-					"Can't change status: can't change status with an empty object or status String");
+			throw new TicketSystemServiceExcption("Cannot changeWorkItemStatus: Empty workItem given!");
 		}
 
 	}
@@ -330,7 +434,7 @@ public class TicketSystemService
 	}
 
 	@Override
-	public Issue getIssue(Long id)
+	public Issue getIssue(long id)
 	{
 		return issueService.getIssue(id);
 	}
@@ -343,33 +447,27 @@ public class TicketSystemService
 			if (null != issueService.getIssue(issue.getId()))
 			{
 				return issueService.updateIssue(issue);
-			} else
+			}
+            else
 			{
-				throw new TicketSystemServiceExcption("Can't update issue: can't update an non existing issue");
+				throw new TicketSystemServiceExcption("Cannot update Issue: Cannot update a non-existing Issue!");
 			}
 		} else
 		{
-			throw new TicketSystemServiceExcption("Can't update issue: can't update issue with empty object");
+			throw new TicketSystemServiceExcption("Cannot update Issue: Empty Issue object given!");
 		}
 	}
 
 	@Override
-	public void removeIssue(Long id)
+	public void removeIssue(final long id)
 	{
-		if (null != id)
-		{
-			if (null != issueService.getIssue(id))
-			{
-				issueService.removeIssue(id);
-			} else
-			{
-				throw new TicketSystemServiceExcption("Can't remove issue: can't remove a non existing issue");
-			}
-		} else
-		{
-			throw new TicketSystemServiceExcption("Can't remove issue: can't remove issue with no id");
-		}
-
+        if (null != issueService.getIssue(id))
+        {
+            issueService.removeIssue(id);
+        }
+        else
+        {
+            throw new TicketSystemServiceExcption("Cannot remove Issue: Cannot remove a non-existing Issue!");
+        }
 	}
-
 }

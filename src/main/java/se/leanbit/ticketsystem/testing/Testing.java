@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class Testing
 {
-    TicketSystemService ticketSystemService;
+    private static TicketSystemService ticketSystemService;
     @Before
     public void setUp() throws Exception
     {
@@ -33,11 +33,14 @@ public class Testing
     public void testaddTeam()
     {
         Team team = new Team("leanbit");
-        team = ticketSystemService.addTeam(team);
+        Team team1 = ticketSystemService.addTeam(team);
+        assertEquals(team, team1);
 
-        System.out.println(team);
-        System.out.println(ticketSystemService.getTeam(team.getTeamName()));
-        assertEquals(team, ticketSystemService.getTeam(team.getTeamName()));
+
+        //Team team2 = ticketSystemService.getTeam(team.getTeamName());
+        //int i = 0;
+          assertEquals(team, ticketSystemService.getTeam(team.getTeamName()));
+     //   assertSame(team, ticketSystemService.getTeam(team.getTeamName()));
 
     }
 }

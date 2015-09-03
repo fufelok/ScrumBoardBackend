@@ -42,22 +42,22 @@ public class Team extends ModelEntity
 
     public String getTeamName()
     {
-        return teamName;
+        return this.teamName;
     }
 
-    public void setTeamName(String teamName)
+    public void setTeamName(final String teamName)
     {
         this.teamName = teamName;
     }
 
     public void addTeamMember(final User user)
     {
-        users.add(user);
+        this.users.add(user);
     }
 
     public void addWorkItem(final WorkItem workItem)
     {
-        workItems.put(UUID.randomUUID().toString(), workItem);
+        this.workItems.put(UUID.randomUUID().toString(), workItem);
     }
 
     @Override
@@ -76,10 +76,12 @@ public class Team extends ModelEntity
         else if (other instanceof Team)
         {
             final Team otherTeam = (Team) other;
-            if (this.getId() == otherTeam.getId()
+            final Map<String, WorkItem> otherWorkItems = new HashMap<>(otherTeam.workItems);
+
+            if (this.getId().equals(otherTeam.getId())
                     && this.getTeamName().equals(otherTeam.getTeamName())
-                    && this.users.equals(otherTeam.users)
-                    && this.workItems.equals(otherTeam.workItems))
+                    && this.users.containsAll(otherTeam.users)
+                    && this.workItems.equals(otherWorkItems))
             {
                 return true;
             }

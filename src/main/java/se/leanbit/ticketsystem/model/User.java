@@ -46,12 +46,12 @@ public class User extends ModelEntity
 
     protected User(){}
     public User(
-            String userID,
-            String userName,
-            String firstName,
-            String lastName,
-            String password,
-            Team team
+            final String userID,
+            final String userName,
+            final String firstName,
+            final String lastName,
+            final String password,
+            final Team team
             )
     {
         this.userID = userID;
@@ -64,95 +64,74 @@ public class User extends ModelEntity
         this.workItems = new HashMap<>();
     }
 
-    public User(
-            Long id,
-            String userID,
-            String userName,
-            String firstName,
-            String lastName,
-            String password,
-            Team team
-    )
-    {
-        super(id);
-        this.userID = userID;
-        this.userName = userName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.password = password;
-        this.team = team;
-
-        this.workItems = new HashMap<>();
-    }
-
     public String getUserID()
     {
-        return userID;
+        return this.userID;
     }
 
-    public void setUserID(String userID)
+    public void setUserID(final String userID)
     {
         this.userID = userID;
     }
 
     public String getUserName()
     {
-        return userName;
+        return this.userName;
     }
 
-    public void setUserName(String userName)
+    public void setUserName(final String userName)
     {
         this.userName = userName;
     }
 
     public String getFirstName()
     {
-        return firstName;
+        return this.firstName;
     }
 
-    public void setFirstName(String firstName)
+    public void setFirstName(final String firstName)
     {
         this.firstName = firstName;
     }
 
     public String getLastName()
     {
-        return lastName;
+        return this.lastName;
     }
 
-    public void setLastName(String lastName)
+    public void setLastName(final String lastName)
     {
         this.lastName = lastName;
     }
 
     public String getPassword()
     {
-        return password;
+        return this.password;
     }
 
-    public void setPassword(String password)
+    public void setPassword(final String password)
     {
         this.password = password;
     }
 
     public Team getTeam()
     {
-        return team;
+        return this.team;
     }
 
-    public void setTeam(Team team)
+    public void setTeam(final Team team)
     {
         this.team = team;
     }
 
     public void addWorkItem(final WorkItem workItem)
     {
-        workItems.put(UUID.randomUUID().toString(), workItem);
+        this.workItems.put(UUID.randomUUID().toString(), workItem);
     }
 
     public void removeWorkItem(final WorkItem workItem)
     {
-        while( workItems.values().remove(workItem) );
+        while( this.workItems.values().remove(workItem) );
     }
 
     public List<WorkItem> getAllWorkItems()
@@ -176,6 +155,7 @@ public class User extends ModelEntity
         else if (other instanceof User)
         {
             final User otherUser = (User) other;
+            final Map<String, WorkItem> otherUserWorkItems = new HashMap<>(otherUser.workItems);
             if (this.getId() == otherUser.getId()
                     && this.userID.equals(otherUser.userID)
                     && this.userName.equals(otherUser.userName)
@@ -183,7 +163,7 @@ public class User extends ModelEntity
                     && this.lastName.equals(otherUser.lastName)
                     && this.password.equals(otherUser.password)
                     && this.team.equals(otherUser.team)
-                    && this.workItems.equals(otherUser.workItems))
+                    && this.workItems.equals(otherUserWorkItems))
             {
                 return true;
             }
