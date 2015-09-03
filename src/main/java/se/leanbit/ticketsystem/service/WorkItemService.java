@@ -5,11 +5,12 @@ import se.leanbit.ticketsystem.model.User;
 import se.leanbit.ticketsystem.model.WorkItem;
 import se.leanbit.ticketsystem.repository.UserRepository;
 import se.leanbit.ticketsystem.repository.WorkItemRepository;
+import se.leanbit.ticketsystem.service.interfaces.WorkItemServiceInterface;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkItemService
+public class WorkItemService implements WorkItemServiceInterface
 {
     @Autowired
     private WorkItemRepository workItemRepository;
@@ -33,9 +34,9 @@ public class WorkItemService
         return null;
     }
 
-    public void removeWorkItem(final String workItemName)
+    public void removeWorkItem(final WorkItem workItem)
     {
-        workItemRepository.removeWorkItem(workItemName);
+        workItemRepository.removeWorkItem(workItem.getName());
     }
 
     public List<WorkItem> getAllWorkItems()

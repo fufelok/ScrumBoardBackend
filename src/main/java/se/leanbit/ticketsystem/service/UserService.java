@@ -6,11 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import se.leanbit.ticketsystem.model.User;
 import se.leanbit.ticketsystem.model.WorkItem;
 import se.leanbit.ticketsystem.repository.UserRepository;
+import se.leanbit.ticketsystem.service.interfaces.UserServiceInterface;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserService
+public class UserService implements UserServiceInterface
 {
     @Autowired
     private UserRepository userRepository;
