@@ -60,4 +60,24 @@ public class Issue extends ModelEntity
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 
+    @Override
+    public final boolean equals(final Object other)
+    {
+        if (this == other)
+        {
+            return true;
+        }
+        else if (other instanceof Issue)
+        {
+            final Issue otherIssue = (Issue) other;
+            if (this.getId() == otherIssue.getId()
+                    && this.getName().equals(otherIssue.getName())
+                    && this.getDescription().equals(otherIssue.getDescription())
+                    && this.getPriority() == otherIssue.getPriority())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

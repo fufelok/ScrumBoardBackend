@@ -165,4 +165,29 @@ public class User extends ModelEntity
     {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
+
+    @Override
+    public final boolean equals(final Object other)
+    {
+        if (this == other)
+        {
+            return true;
+        }
+        else if (other instanceof User)
+        {
+            final User otherUser = (User) other;
+            if (this.getId() == otherUser.getId()
+                    && this.userID.equals(otherUser.userID)
+                    && this.userName.equals(otherUser.userName)
+                    && this.firstName.equals(otherUser.firstName)
+                    && this.lastName.equals(otherUser.lastName)
+                    && this.password.equals(otherUser.password)
+                    && this.team.equals(otherUser.team)
+                    && this.workItems.equals(otherUser.workItems))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

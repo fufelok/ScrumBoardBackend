@@ -1,5 +1,6 @@
 package se.leanbit.ticketsystem.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import se.leanbit.ticketsystem.exception.TicketSystemServiceExcption;
 import se.leanbit.ticketsystem.model.Issue;
 import se.leanbit.ticketsystem.model.Team;
@@ -16,10 +17,14 @@ import java.util.List;
 public class TicketSystemService
 		implements UserServiceInterface, TeamServiceInterface, WorkItemServiceInterface, IssueServiceInterface
 {
-	final UserService userService = new UserService();
-	final WorkItemService workItemService = new WorkItemService();
-	final TeamService teamService = new TeamService();
-	final IssueService issueService = new IssueService();
+	@Autowired
+	UserService userService;
+	@Autowired
+	WorkItemService workItemService;
+	@Autowired
+	TeamService teamService;
+	@Autowired
+	IssueService issueService;
 
 	public TicketSystemService()
 	{

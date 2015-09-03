@@ -91,4 +91,26 @@ public class WorkItem extends ModelEntity
     {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
+
+    @Override
+    public final boolean equals(final Object other)
+    {
+        if (this == other)
+        {
+            return true;
+        }
+        else if (other instanceof WorkItem)
+        {
+            final WorkItem otherWorkItem = (WorkItem) other;
+            if (this.getId() == otherWorkItem.getId()
+                    && this.name.equals(otherWorkItem.name)
+                    && this.description.equals(otherWorkItem.description)
+                    && this.priority == otherWorkItem.priority
+                    && this.issue.equals(otherWorkItem.issue))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

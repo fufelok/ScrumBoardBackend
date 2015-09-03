@@ -65,4 +65,25 @@ public class Team extends ModelEntity
     {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
+
+    @Override
+    public final boolean equals(final Object other)
+    {
+        if (this == other)
+        {
+            return true;
+        }
+        else if (other instanceof Team)
+        {
+            final Team otherTeam = (Team) other;
+            if (this.getId() == otherTeam.getId()
+                    && this.getTeamName().equals(otherTeam.getTeamName())
+                    && this.users.equals(otherTeam.users)
+                    && this.workItems.equals(otherTeam.workItems))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
