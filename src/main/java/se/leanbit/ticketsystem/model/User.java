@@ -1,6 +1,7 @@
 package se.leanbit.ticketsystem.model;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import se.leanbit.ticketsystem.exception.ModelException;
 import se.leanbit.ticketsystem.model.abstra.ModelEntity;
 
 import javax.persistence.CascadeType;
@@ -16,10 +17,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 public class User extends ModelEntity
@@ -59,9 +57,10 @@ public class User extends ModelEntity
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        this.team = team;
+        setTeam(team);
 
         this.workItems = new HashMap<>();
+
     }
 
     public String getUserID()
@@ -121,7 +120,14 @@ public class User extends ModelEntity
 
     public void setTeam(final Team team)
     {
-        this.team = team;
+        if(null != team)
+        {
+            this.team = team;
+        }
+        else
+        {
+            throw new ModelException("User: User must be part of a team!");
+        }
     }
 
     public void addWorkItem(final WorkItem workItem)
@@ -136,7 +142,8 @@ public class User extends ModelEntity
 
     public List<WorkItem> getAllWorkItems()
     {
-        return (List<WorkItem>)this.workItems.values();
+        List<WorkItem> workItems = new ArrayList<WorkItem>(this.workItems.values());
+        return workItems;
     }
 
     @Override

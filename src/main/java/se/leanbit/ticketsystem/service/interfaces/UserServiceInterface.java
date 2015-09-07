@@ -15,7 +15,7 @@ public interface UserServiceInterface
 
 	public User getUserWithID(final String userID);
 
-	public User getUserWithUsername(final String userName);
+	public User getUserWithUserName(final String userName);
 
 	public List<User> getUsersWithFirstName(final String firstName);
 
@@ -27,5 +27,5 @@ public interface UserServiceInterface
 
 	public List<User> getUsersWithWorkItem(final WorkItem workItem);
 
-	public List<User> getAllusers();
+	public List<User> getAllUsers();
 }

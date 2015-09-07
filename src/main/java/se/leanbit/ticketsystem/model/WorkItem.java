@@ -31,6 +31,20 @@ public class WorkItem extends ModelEntity
         this.priority = priority;
     }
 
+    public WorkItem(final String name,
+                    final String description,
+                    final String status,
+                    final int priority,
+                    final Issue issue)
+    {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.priority = priority;
+        this.issue = issue;
+    }
+
+
     public String getName()
     {
         return this.name;

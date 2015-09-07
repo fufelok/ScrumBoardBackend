@@ -3,6 +3,7 @@ package se.leanbit.ticketsystem.service.interfaces;
 import java.util.List;
 
 import se.leanbit.ticketsystem.model.Team;
+import se.leanbit.ticketsystem.model.User;
 
 public interface TeamServiceInterface 
 {
@@ -10,9 +11,9 @@ public interface TeamServiceInterface
 
 	public Team getTeam(final String teamName);
 
-	public Team updateTeam(final Team team);
-
 	public void removeTeam(final String teamName);
 
 	public List<Team> getAllTeams();
+
+	public List<User> getAllUsersFromTeam(final String teamName);
 }

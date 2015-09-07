@@ -1,7 +1,7 @@
 package se.leanbit.ticketsystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import se.leanbit.ticketsystem.exception.TicketSystemServiceExcption;
+import se.leanbit.ticketsystem.exception.*;
 import se.leanbit.ticketsystem.model.Issue;
 import se.leanbit.ticketsystem.model.Team;
 import se.leanbit.ticketsystem.model.User;
@@ -35,11 +35,21 @@ public class TicketSystemService implements UserServiceInterface,
 	{
 		if (null != user)
 		{
-			return userService.addUser(user);
+			try
+			{
+				userService.addUser(user);
+			}
+			catch (final UserServiceException exception)
+			{
+				throw new TicketSystemServiceException("TicketSystemService: Could not addUser!", exception);
+			}
+
+			//Returning the addUser object ignores all DB relations??
+			return getUserWithID(user.getUserID());
 		}
         else
 		{
-			throw new TicketSystemServiceExcption("addUser: Cannot add an empty user!");
+			throw new TicketSystemServiceException("TicketSystemService: addUser: Cannot add an empty user!");
 		}
 	}
 
@@ -47,19 +57,18 @@ public class TicketSystemService implements UserServiceInterface,
 	{
         if(!userID.isEmpty())
         {
-            final User user = userService.getUserWithID(userID);
-            if(null != user)
-            {
-                return user;
-            }
-            else
-            {
-                throw new TicketSystemServiceExcption("Cannot get user: No existing user with ID: " + user.getUserID());
-            }
+			try
+			{
+				return userService.getUserWithID(userID);
+			}
+			catch (final UserServiceException exception)
+			{
+				throw new TicketSystemServiceException("TicketSystemService: Cannot getUserWithID!", exception);
+			}
         }
         else
         {
-            throw new TicketSystemServiceExcption("Cannot get user: empty string!");
+            throw new TicketSystemServiceException("TicketSystemService: Cannot get userWithID: empty string!");
         }
 	}
 
@@ -67,18 +76,25 @@ public class TicketSystemService implements UserServiceInterface,
 	{
 		if (null != user)
 		{
-			if (null != getUserWithID(user.getUserID()))
+			try
 			{
-				return userService.updateUser(user);
+				User newUser = getUserWithID(user.getUserID());
+				newUser.setUserName(user.getUserName());
+				newUser.setFirstName(user.getFirstName());
+				newUser.setLastName(user.getLastName());
+				newUser.setPassword(user.getPassword());
+				newUser.setTeam(user.getTeam());
+
+				return userService.updateUser(newUser);
 			}
-            else
+			catch (final UserServiceException exception)
 			{
-                throw new TicketSystemServiceExcption("Cannot update user: No existing user with ID: " + user.getUserID());
+				throw new TicketSystemServiceException("TicketSystemService: Cannot updateUser!", exception);
 			}
 		}
         else
 		{
-			throw new TicketSystemServiceExcption("Cannot update a user with an empty object!");
+			throw new TicketSystemServiceException("TicketSystemService: Cannot update a user with an empty object!");
 		}
 	}
 
@@ -86,48 +102,98 @@ public class TicketSystemService implements UserServiceInterface,
 	{
 		if (!userID.isEmpty())
 		{
-			if (null != userService.getUserWithID(userID))
+			try
 			{
 				userService.removeUser(userID);
 			}
-            else
+			catch (final UserServiceException exception)
 			{
-				throw new TicketSystemServiceExcption("Cannot remove user: No existing user with ID: " + userID);
+				throw new TicketSystemServiceException("TicketSystemService: Cannot removeUser!", exception);
 			}
-		} else
+		}
+		else
 		{
-			throw new TicketSystemServiceExcption("Cannot remove user: Remove what?");
+			throw new TicketSystemServiceException("TicketSystemService: Cannot remove user: Remove what?");
 		}
 	}
 
-	public User getUserWithUsername(final String userName)
+	public User getUserWithUserName(final String userName)
 	{
-		return userService.getUserWithUsername(userName);
+		if (!userName.isEmpty())
+		{
+			try
+			{
+				return userService.getUserWithUserName(userName);
+			}
+			catch (final UserServiceException exception)
+			{
+				throw new TicketSystemServiceException("TicketSystemService: Cannot getUsersWithUserName!", exception);
+			}
+		}
+		else
+		{
+			throw new TicketSystemServiceException("TicketSystemService: Cannot getUserWithUserName: empty input!");
+		}
 	}
 
 	public List<User> getUsersWithFirstName(final String firstName)
 	{
-		return userService.getUsersWithFirstName(firstName);
+		try
+		{
+			return userService.getUsersWithFirstName(firstName);
+		}
+		catch (final UserServiceException exception)
+		{
+			throw new TicketSystemServiceException("TicketSystemService: Cannot getUsersWithFirstName!", exception);
+		}
 	}
 
 	public List<User> getUsersWithLastName(final String lastName)
 	{
-		return userService.getUsersWithLastName(lastName);
+		try
+		{
+			return userService.getUsersWithLastName(lastName);
+		}
+		catch (final UserServiceException exception)
+		{
+			throw new TicketSystemServiceException("TicketSystemService: Cannot getUsersWithLastName!", exception);
+		}
 	}
 
 	public List<User> getUsersByTeamName(final String teamName)
 	{
-		return userService.getUsersByTeamName(teamName);
+		try
+		{
+			return userService.getUsersByTeamName(teamName);
+		}
+		catch (final UserServiceException exception)
+		{
+			throw new TicketSystemServiceException("TicketSystemService: Cannot getUsersByTeamName!", exception);
+		}
 	}
 
-	public List<User> getAllusers()
+	public List<User> getAllUsers()
 	{
-		return userService.getAllusers();
+		try
+		{
+			return userService.getAllUsers();
+		}
+		catch (final UserServiceException exception)
+		{
+			throw new TicketSystemServiceException("TicketSystemService: Cannot getAllUsers!", exception);
+		}
 	}
 
 	public List<User> getUsersWithWorkItem(WorkItem workItem)
 	{
-        return userService.getUsersWithWorkItem(workItem);
+		try
+		{
+			return userService.getUsersWithWorkItem(workItem);
+		}
+		catch (final UserServiceException exception)
+		{
+			throw new TicketSystemServiceException("TicketSystemService: Cannot getUsersWithWorkItem!", exception);
+		}
 	}
 
 
@@ -138,11 +204,20 @@ public class TicketSystemService implements UserServiceInterface,
 	{
 		if (null != team)
 		{
-			return teamService.addTeam(team);
+			try
+			{
+				teamService.addTeam(team);
+			}
+			catch (final TeamServiceException exception)
+			{
+				throw new TicketSystemServiceException("TicketSystemService: Cannot addTeam!", exception);
+			}
+
+			return teamService.getTeam(team.getTeamName());
 		}
         else
 		{
-			throw new TicketSystemServiceExcption("Cannot add Team: Cannot add an empty object!");
+			throw new TicketSystemServiceException("TicketSystemService: Cannot add Team: Cannot add an empty object!");
 		}
 	}
 
@@ -150,37 +225,18 @@ public class TicketSystemService implements UserServiceInterface,
 	{
 		if (!teamName.isEmpty())
 		{
-            Team team = teamService.getTeam(teamName);
-            if(null != team)
-            {
-                return team;
-            }
-            else
-            {
-                throw new TicketSystemServiceExcption("Cannot getTeam: There is no team with the name \"" + teamName +"\"");
-            }
+			try
+			{
+				return teamService.getTeam(teamName);
+			}
+			catch (final TeamServiceException exception)
+			{
+				throw new TicketSystemServiceException("TicketSystemService: Cannot getTeam!", exception);
+			}
 		}
         else
 		{
-			throw new TicketSystemServiceExcption("Cannot getTeam: Cannot get an empty object!");
-		}
-	}
-
-	public Team updateTeam(final Team team)
-	{
-		if (null != team)
-		{
-			if (null != teamService.getTeam(team.getTeamName()))
-			{
-				return teamService.updateTeam(team);
-			}
-            else
-			{
-				throw new TicketSystemServiceExcption("Cannot update Team: There is no team with the name \"" + team.getTeamName() +"\"");
-			}
-		} else
-		{
-			throw new TicketSystemServiceExcption("Cannot update Team: Cannot update with an empty object!");
+			throw new TicketSystemServiceException("TicketSystemService: Cannot getTeam: Cannot get an empty object!");
 		}
 	}
 
@@ -188,7 +244,7 @@ public class TicketSystemService implements UserServiceInterface,
 	{
 		if (!teamName.isEmpty())
 		{
-			if (null != teamService.getTeam(teamName))
+			try
 			{
 				List<User> teamMembers = userService.getUsersByTeamName(teamName);
 				for (User user : teamMembers)
@@ -198,22 +254,41 @@ public class TicketSystemService implements UserServiceInterface,
 				}
 				teamService.removeTeam(teamName);
 			}
-            else
+			catch (final TeamServiceException exception)
 			{
-				throw new TicketSystemServiceExcption("Cannot remove team: There is no team with the name \"" + teamName +"\"");
+				throw new TicketSystemServiceException("TicketSystemService: Cannot addTeam!", exception);
 			}
-		} else
+		}
+		else
 		{
-			throw new TicketSystemServiceExcption("Cannot remove Team: Cannot remove with an empty object!");
+			throw new TicketSystemServiceException("TicketSystemService: Cannot remove Team: Cannot remove with an empty object!");
 		}
 	}
 
 	public List<Team> getAllTeams()
 	{
-		return teamService.getAllTeams();
+		try
+		{
+			return teamService.getAllTeams();
+		}
+		catch (final TeamServiceException exception)
+		{
+			throw new TicketSystemServiceException("TicketSystemService: Cannot getAllTeams!", exception);
+		}
 	}
 
-
+	@Override
+	public List<User> getAllUsersFromTeam(final String teamName)
+	{
+		try
+		{
+			return teamService.getAllUsersFromTeam(teamName);
+		}
+		catch (final TeamServiceException exception)
+		{
+			throw new TicketSystemServiceException("TicketSystemService: Cannot getAllUsersFromTeam!", exception);
+		}
+	}
 
 
 	// WorkItems service methods
@@ -221,11 +296,20 @@ public class TicketSystemService implements UserServiceInterface,
 	{
 		if (null != workItem)
 		{
-			return workItemService.addWorkItem(workItem);
+			try
+			{
+				workItemService.addWorkItem(workItem);
+			}
+			catch (final WorkItemServiceException exception)
+			{
+				throw new TicketSystemServiceException("TicketSystemService: cannot addWorkItem!", exception);
+			}
+
+			return workItemService.getWorkItem(workItem.getName());
 		}
         else
 		{
-			throw new TicketSystemServiceExcption("Cannot add WorkItem: Cannot add an empty object!");
+			throw new TicketSystemServiceException("TicketSystemService: Cannot add WorkItem: Cannot add an empty object!");
 		}
 	}
 
@@ -233,19 +317,18 @@ public class TicketSystemService implements UserServiceInterface,
 	{
 		if (!workItemName.isEmpty())
 		{
-            WorkItem workItem = workItemService.getWorkItem(workItemName);
-            if(null != workItem)
-            {
-                return workItem;
-            }
-            else
-            {
-                throw new TicketSystemServiceExcption("Cannot getWorkItem: There is no WorkItem with the name \"" + workItemName + "\"");
-            }
+			try
+			{
+				return workItemService.getWorkItem(workItemName);
+			}
+			catch (final WorkItemServiceException exception)
+			{
+				throw new TicketSystemServiceException("TicketSystemService: cannot getWorkItem!", exception);
+			}
 		}
         else
 		{
-			throw new TicketSystemServiceExcption("Cannot get WorkItem: can't get WorkItem with non existing workItem name");
+			throw new TicketSystemServiceException("TicketSystemService: Cannot get WorkItem: Cannot get with an empty object!");
 		}
 	}
 
@@ -253,43 +336,50 @@ public class TicketSystemService implements UserServiceInterface,
 	{
 		if (null != workItem)
 		{
-			if (null != workItemService.getWorkItem(workItem.getName()))
+			try
 			{
+				workItemService.getWorkItem(workItem.getName());
 				return workItemService.updateWorkItem(workItem);
 			}
-            else
+			catch (final WorkItemServiceException exception)
 			{
-				throw new TicketSystemServiceExcption("Cannot update workItem: There is no WorkItem with the name: \"" + workItem.getName() + "\"");
+				throw new TicketSystemServiceException("TicketSystemService: cannot updateWorkItem!", exception);
 			}
 		} else
 		{
-			throw new TicketSystemServiceExcption("Cannot update workItem: Cannot update WorkItem with an empty object!");
+			throw new TicketSystemServiceException("TicketSystemService: Cannot update workItem: Cannot update WorkItem with an empty object!");
 		}
 	}
 
 	public void removeWorkItem(final WorkItem workItem)
 	{
-		if (null != workItemService.getWorkItem(workItem.getName()))
+		if(null != workItem)
 		{
-            if(null != getWorkItem(workItem.getName()))
-            {
-                List<User> workUsers = userService.getUsersWithWorkItem(workItem);
-                for (User user : workUsers)
-                {
-                    user.removeWorkItem(workItem);
-                    userService.updateUser(user);
-                }
+			try
+			{
+				workItemService.getWorkItem(workItem.getName());
+			}
+			catch (final WorkItemServiceException exception)
+			{
+				throw new TicketSystemServiceException("TicketSystemService: cannot removeWorkItem!", exception);
+			}
 
-                workItemService.removeWorkItem(workItem);
-            }
-            else
-            {
-                throw new TicketSystemServiceExcption("Cannot remove WorkItem: There is no WorkItem with the name \"" + workItem.getName() + "\"");
-            }
+			try
+			{
+				List<User> workUsers = userService.getUsersWithWorkItem(workItem);
+				for (User user : workUsers)
+				{
+					user.removeWorkItem(workItem);
+					userService.updateUser(user);
+				}
 
-		} else
-		{
-			throw new TicketSystemServiceExcption("Cannot remove WorkItem: Cannot remove workItem with empty object");
+				workItemService.removeWorkItem(workItem);
+			}
+			catch (final WorkItemServiceException exception)
+			{
+				throw new TicketSystemServiceException("TicketSystemService: cannot removeWorkItem!", exception);
+			}
+
 		}
 	}
 
@@ -297,25 +387,34 @@ public class TicketSystemService implements UserServiceInterface,
 	{
         if(null != team)
         {
-            if(null != getTeam(team.getTeamName()))
-            {
-                List<User> users = getUsersByTeamName(team.getTeamName());
-                List<WorkItem> workItems = new ArrayList<>();
+			try
+			{
+				getTeam(team.getTeamName());
+			}
+			catch (final WorkItemServiceException exception)
+			{
+				throw new TicketSystemServiceException("TicketSystemService: cannot getWorkItemsFromTeam!", exception);
+			}
 
-                for (User currentUser : users)
-                {
-                    workItems.addAll(currentUser.getAllWorkItems());
-                }
-                return workItems;
-            }
-            else
-            {
-                throw new TicketSystemServiceExcption("Cannot getWorkItems from team \"" + team.getTeamName() + "\": There is no such team.");
-            }
+			try
+			{
+				List<User> users = getUsersByTeamName(team.getTeamName());
+				List<WorkItem> workItems = new ArrayList<>();
+
+				for (User currentUser : users)
+				{
+					workItems.addAll(currentUser.getAllWorkItems());
+				}
+				return workItems;
+			}
+			catch (final WorkItemServiceException exception)
+			{
+				throw new TicketSystemServiceException("TicketSystemService: cannot getWorkItemsFromTeam!", exception);
+			}
         }
         else
         {
-            throw new TicketSystemServiceExcption("Cannot getWorkItems from team: Cannot get WorkItems from an empty Team!");
+            throw new TicketSystemServiceException("Cannot getWorkItems from team: Cannot get WorkItems from an empty Team!");
         }
 
 	}
@@ -326,84 +425,126 @@ public class TicketSystemService implements UserServiceInterface,
         {
             if(null != workItem)
             {
-                if(null != getUserWithID(user.getUserID()))
-                {
-                    if(null != getWorkItem(workItem.getName()))
-                    {
-                        user.addWorkItem(workItem);
-                        return userService.updateUser(user);
-                    }
-                    else
-                    {
-                        throw new TicketSystemServiceExcption("Cannot addWorkItemToUser: There is no WorkItem with the name: "+workItem.getName());
-                    }
-                }
-                else
-                {
-                    throw new TicketSystemServiceExcption("Cannot addWorkItemToUser: There is no User with ID: "+user.getUserID());
-                }
+				try
+				{
+					getUserWithID(user.getUserID());
+					getWorkItem(workItem.getName());
+				}
+				catch (final WorkItemServiceException exception)
+				{
+					throw new TicketSystemServiceException("TicketSystemService: addWorkItemToUser!", exception);
+				}
+
+				try
+				{
+					user.addWorkItem(workItem);
+					return userService.updateUser(user);
+				}
+				catch (final WorkItemServiceException exception)
+				{
+					throw new TicketSystemServiceException("TicketSystemService: addWorkItemToUser!", exception);
+				}
             }
             else
             {
-                throw new TicketSystemServiceExcption("Cannot addWorkItemToUser: Cannot add an empty WorkItem!");
+                throw new TicketSystemServiceException("TicketSystemService: Cannot addWorkItemToUser: Cannot add an empty WorkItem!");
             }
         }
         else
         {
-            throw new TicketSystemServiceExcption("Cannot addWorkItemToUser: The given User object is empty!");
+            throw new TicketSystemServiceException("TicketSystemService: Cannot addWorkItemToUser: The given User object is empty!");
         }
 	}
 
 	public List<WorkItem> getAllWorkItems()
 	{
-		return workItemService.getAllWorkItems();
+		try
+		{
+			return workItemService.getAllWorkItems();
+		}
+		catch (final WorkItemServiceException exception)
+		{
+			throw new TicketSystemServiceException("TicketSystemService: Could not getAllWorkItems!", exception);
+		}
+
 	}
 
 	public List<WorkItem> getWorkItemsWithIssue()
 	{
-		return workItemService.getWorkItemsWithIssue();
+		try
+		{
+			return workItemService.getWorkItemsWithIssue();
+		}
+		catch (final WorkItemServiceException exception)
+		{
+			throw new TicketSystemServiceException("TicketSystemService: Could not getWorkItemsWithIssue!", exception);
+		}
+
 	}
 
 	public List<WorkItem> getAllWorkItemsWithStatus(final String status)
 	{
-		return workItemService.getAllWorkItemsWithStatus(status);
+		if(!status.isEmpty())
+		{
+			try
+			{
+				return workItemService.getAllWorkItemsWithStatus(status);
+			}
+			catch (final WorkItemServiceException exception)
+			{
+				throw new TicketSystemServiceException("TicketSystemService: Could not getAllWorkItemsWithStatus!", exception);
+			}
+		}
+		else
+		{
+			throw new TicketSystemServiceException("TicketSystemService: Cannot getAllWorkItemsWithStatus: The given User object is empty!");
+		}
+
 	}
 
 	public List<WorkItem> getWorkItemWithDescriptionLike(final String description)
 	{
 		if (!description.isEmpty())
 		{
-			return workItemService.getWorkItemWithDescriptionLike(description);
+			try
+			{
+				return workItemService.getWorkItemWithDescriptionLike(description);
+			}
+			catch (final WorkItemServiceException exception)
+			{
+				throw new TicketSystemServiceException("TicketSystemService: Could not getWorkItemWithDescriptionLike!", exception);
+			}
 		}
         else
 		{
-			throw new TicketSystemServiceExcption("Can't get workItem: can't get workItem with empty description");
+			throw new TicketSystemServiceException("TicketSystemService: Can't get workItem: can't get workItem with empty description");
 		}
 	}
 
-	public WorkItem changeWorkItemStatus(WorkItem workItem, String status)
+	public WorkItem changeWorkItemStatus(final WorkItem workItem, final String status)
 	{
 		if (null != workItem)
 		{
             if(!status.isEmpty())
             {
-                if(null != getWorkItem(workItem.getName()))
-                {
-                    return workItemService.changeWorkItemStatus(workItem, status);
-                }
-                else
-                {
-                    throw new TicketSystemServiceExcption("Cannot changeWorkItemStatus: There is no WorkItem with the name: " + workItem.getName());
-                }
+				try
+				{
+					getWorkItem(workItem.getName());
+					return workItemService.changeWorkItemStatus(workItem, status);
+				}
+				catch (final WorkItemServiceException exception)
+				{
+					throw new TicketSystemServiceException("TicketSystemService: Could not changeWorkItemStatus!", exception);
+				}
             }
             else
             {
-                throw new TicketSystemServiceExcption("Cannot changeWorkItemStatus: The given status object is empty!");
+                throw new TicketSystemServiceException("TicketSystemService: Cannot changeWorkItemStatus: The given status object is empty!");
             }
 		}
         else
 		{
-			throw new TicketSystemServiceExcption("Cannot changeWorkItemStatus: Empty workItem given!");
+			throw new TicketSystemServiceException("TicketSystemService: Cannot changeWorkItemStatus: Empty workItem given!");
 		}
 
 	}
@@ -412,31 +553,58 @@ public class TicketSystemService implements UserServiceInterface,
 	{
 		if (null != userID)
 		{
-			return userService.getWorkItemsFromUser(userID);
-
-		} else
+			try
+			{
+				return userService.getWorkItemsFromUser(userID);
+			}
+			catch (final WorkItemServiceException exception)
+			{
+				throw new TicketSystemServiceException("TicketSystemService: Could not getWorkItemsFromUser!", exception);
+			}
+		}
+		else
 		{
-			throw new TicketSystemServiceExcption("Can't get workItems: can't get workItems with an empty string");
+			throw new TicketSystemServiceException("TicketSystemService: Cannot getWorkItemsFromUser: cannot get WorkItems with an empty string!");
 		}
 	}
 
+
+
+
 	// Issue service methods
 	@Override
-	public Issue addIssue(Issue issue)
+	public Issue addIssue(final Issue issue)
 	{
 		if (null != issue)
 		{
-			return issueService.addIssue(issue);
-		} else
+			try
+			{
+				issueService.addIssue(issue);
+			}
+			catch (final IssueServiceException exception)
+			{
+				throw new TicketSystemServiceException("TicketSystemService: Could not addIssue!", exception);
+			}
+
+			return issueService.getIssue(issue.getId());
+		}
+		else
 		{
-			throw new TicketSystemServiceExcption("Can't add issue: can't add issue with an empty object");
+			throw new TicketSystemServiceException("TicketSystemService: Cannot add issue: Cannot add issue with an empty object!");
 		}
 	}
 
 	@Override
 	public Issue getIssue(long id)
 	{
-		return issueService.getIssue(id);
+		try
+		{
+			return issueService.getIssue(id);
+		}
+		catch (final IssueServiceException exception)
+		{
+			throw new TicketSystemServiceException("TicketSystemService: Could not getIssue!", exception);
+		}
 	}
 
 	@Override
@@ -444,30 +612,32 @@ public class TicketSystemService implements UserServiceInterface,
 	{
 		if (null != issue)
 		{
-			if (null != issueService.getIssue(issue.getId()))
+			try
 			{
+				issueService.getIssue(issue.getId());
 				return issueService.updateIssue(issue);
 			}
-            else
+			catch (final IssueServiceException exception)
 			{
-				throw new TicketSystemServiceExcption("Cannot update Issue: Cannot update a non-existing Issue!");
+				throw new TicketSystemServiceException("TicketSystemService: Could not updateIssue!", exception);
 			}
-		} else
+		}
+		else
 		{
-			throw new TicketSystemServiceExcption("Cannot update Issue: Empty Issue object given!");
+			throw new TicketSystemServiceException("TicketSystemService: Cannot update Issue: Empty Issue object given!");
 		}
 	}
 
 	@Override
 	public void removeIssue(final long id)
 	{
-        if (null != issueService.getIssue(id))
-        {
-            issueService.removeIssue(id);
-        }
-        else
-        {
-            throw new TicketSystemServiceExcption("Cannot remove Issue: Cannot remove a non-existing Issue!");
-        }
+		try
+		{
+			issueService.removeIssue(id);
+		}
+		catch (final IssueServiceException exception)
+		{
+			throw new TicketSystemServiceException("TicketSystemService: Could not removeIssue!", exception);
+		}
 	}
 }

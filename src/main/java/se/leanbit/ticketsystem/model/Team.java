@@ -24,20 +24,14 @@ public class Team extends ModelEntity
     @Column(name = "team_name", unique = true)
     String teamName;
 
-    @OneToMany(mappedBy = "team", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "team", fetch = FetchType.EAGER)
     private Collection<User> users;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "Team_Workitems")
-    @MapKeyColumn(name = "ID")
-    private Map<String, WorkItem> workItems;
 
     protected Team(){}
     public Team(final String teamName)
     {
         this.teamName = teamName;
         users = new ArrayList<>();
-        workItems = new HashMap<>();
     }
 
     public String getTeamName()
@@ -50,14 +44,19 @@ public class Team extends ModelEntity
         this.teamName = teamName;
     }
 
-    public void addTeamMember(final User user)
+    public List<User> getTeamMembers()
     {
-        this.users.add(user);
+        return (List<User>) users;
     }
 
-    public void addWorkItem(final WorkItem workItem)
+    public List<WorkItem> getAllWorkItems()
     {
-        this.workItems.put(UUID.randomUUID().toString(), workItem);
+        List<WorkItem> workItems = new ArrayList<>();
+        for(User user: users)
+        {
+            workItems.addAll(user.getAllWorkItems());
+        }
+        return workItems;
     }
 
     @Override
@@ -76,12 +75,8 @@ public class Team extends ModelEntity
         else if (other instanceof Team)
         {
             final Team otherTeam = (Team) other;
-            final Map<String, WorkItem> otherWorkItems = new HashMap<>(otherTeam.workItems);
-
             if (this.getId().equals(otherTeam.getId())
-                    && this.getTeamName().equals(otherTeam.getTeamName())
-                    && this.users.containsAll(otherTeam.users)
-                    && this.workItems.equals(otherWorkItems))
+                    && this.getTeamName().equals(otherTeam.getTeamName()))
             {
                 return true;
             }
