@@ -24,7 +24,7 @@ public class User extends ModelEntity
 {
     @Column(name = "user_id", unique = true)
     private String userID;
-    @Column(name = "user_name", unique = true)
+    @Column(name = "user_name")
     private String userName;
     @Column(name = "first_name")
     private String firstName;
@@ -120,6 +120,7 @@ public class User extends ModelEntity
 
     public void setTeam(final Team team)
     {
+        /*
         if(null != team)
         {
             this.team = team;
@@ -128,6 +129,8 @@ public class User extends ModelEntity
         {
             throw new ModelException("User: User must be part of a team!");
         }
+        */
+        this.team = team;
     }
 
     public void addWorkItem(final WorkItem workItem)
@@ -152,7 +155,6 @@ public class User extends ModelEntity
         return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 
-    @Override
     public final boolean equals(final Object other)
     {
         if (this == other)
@@ -163,16 +165,32 @@ public class User extends ModelEntity
         {
             final User otherUser = (User) other;
             final Map<String, WorkItem> otherUserWorkItems = new HashMap<>(otherUser.workItems);
+
             if (this.getId() == otherUser.getId()
                     && this.userID.equals(otherUser.userID)
                     && this.userName.equals(otherUser.userName)
                     && this.firstName.equals(otherUser.firstName)
                     && this.lastName.equals(otherUser.lastName)
                     && this.password.equals(otherUser.password)
-                    && this.team.equals(otherUser.team)
-                    && this.workItems.equals(otherUserWorkItems))
+                    && this.workItems.equals(otherUserWorkItems)
+                    )
             {
-                return true;
+                if(null != this.team && null != otherUser.team)
+                {
+                    if(this.team.equals(otherUser.team))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                else if(null == this.team && null == otherUser.team)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
         return false;

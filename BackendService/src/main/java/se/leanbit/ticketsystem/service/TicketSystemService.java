@@ -6,18 +6,12 @@ import se.leanbit.ticketsystem.model.Issue;
 import se.leanbit.ticketsystem.model.Team;
 import se.leanbit.ticketsystem.model.User;
 import se.leanbit.ticketsystem.model.WorkItem;
-import se.leanbit.ticketsystem.service.interfaces.IssueServiceInterface;
-import se.leanbit.ticketsystem.service.interfaces.TeamServiceInterface;
-import se.leanbit.ticketsystem.service.interfaces.UserServiceInterface;
-import se.leanbit.ticketsystem.service.interfaces.WorkItemServiceInterface;
+import se.leanbit.ticketsystem.service.interfaces.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TicketSystemService implements UserServiceInterface,
-											TeamServiceInterface,
-                                            WorkItemServiceInterface,
-                                            IssueServiceInterface
+public class TicketSystemService implements TicketSystemServiceInterface
 {
 	@Autowired
 	UserService userService;
@@ -31,6 +25,7 @@ public class TicketSystemService implements UserServiceInterface,
 	public TicketSystemService(){}
 
 	// User service methods
+	@Override
 	public User addUser(final User user)
 	{
 		if (null != user)
@@ -53,6 +48,7 @@ public class TicketSystemService implements UserServiceInterface,
 		}
 	}
 
+	@Override
 	public User getUserWithID(final String userID)
 	{
         if(!userID.isEmpty())
@@ -72,6 +68,7 @@ public class TicketSystemService implements UserServiceInterface,
         }
 	}
 
+	@Override
 	public User updateUser(final User user)
 	{
 		if (null != user)
@@ -98,6 +95,7 @@ public class TicketSystemService implements UserServiceInterface,
 		}
 	}
 
+	@Override
 	public void removeUser(final String userID)
 	{
 		if (!userID.isEmpty())
@@ -117,6 +115,7 @@ public class TicketSystemService implements UserServiceInterface,
 		}
 	}
 
+	@Override
 	public User getUserWithUserName(final String userName)
 	{
 		if (!userName.isEmpty())
@@ -136,6 +135,7 @@ public class TicketSystemService implements UserServiceInterface,
 		}
 	}
 
+	@Override
 	public List<User> getUsersWithFirstName(final String firstName)
 	{
 		try
@@ -148,6 +148,7 @@ public class TicketSystemService implements UserServiceInterface,
 		}
 	}
 
+	@Override
 	public List<User> getUsersWithLastName(final String lastName)
 	{
 		try
@@ -160,6 +161,7 @@ public class TicketSystemService implements UserServiceInterface,
 		}
 	}
 
+	@Override
 	public List<User> getUsersByTeamName(final String teamName)
 	{
 		try
@@ -172,6 +174,7 @@ public class TicketSystemService implements UserServiceInterface,
 		}
 	}
 
+	@Override
 	public List<User> getAllUsers()
 	{
 		try
@@ -184,6 +187,7 @@ public class TicketSystemService implements UserServiceInterface,
 		}
 	}
 
+	@Override
 	public List<User> getUsersWithWorkItem(WorkItem workItem)
 	{
 		try
@@ -200,6 +204,7 @@ public class TicketSystemService implements UserServiceInterface,
 
 
 	// Team service methods
+	@Override
 	public Team addTeam(final Team team)
 	{
 		if (null != team)
@@ -221,6 +226,7 @@ public class TicketSystemService implements UserServiceInterface,
 		}
 	}
 
+	@Override
 	public Team getTeam(final String teamName)
 	{
 		if (!teamName.isEmpty())
@@ -240,6 +246,7 @@ public class TicketSystemService implements UserServiceInterface,
 		}
 	}
 
+	@Override
 	public void removeTeam(final String teamName)
 	{
 		if (!teamName.isEmpty())
@@ -265,6 +272,7 @@ public class TicketSystemService implements UserServiceInterface,
 		}
 	}
 
+	@Override
 	public List<Team> getAllTeams()
 	{
 		try
@@ -292,6 +300,7 @@ public class TicketSystemService implements UserServiceInterface,
 
 
 	// WorkItems service methods
+	@Override
 	public WorkItem addWorkItem(final WorkItem workItem)
 	{
 		if (null != workItem)
@@ -313,6 +322,7 @@ public class TicketSystemService implements UserServiceInterface,
 		}
 	}
 
+	@Override
 	public WorkItem getWorkItem(final String workItemName)
 	{
 		if (!workItemName.isEmpty())
@@ -332,6 +342,7 @@ public class TicketSystemService implements UserServiceInterface,
 		}
 	}
 
+	@Override
 	public WorkItem updateWorkItem(final WorkItem workItem)
 	{
 		if (null != workItem)
@@ -351,6 +362,7 @@ public class TicketSystemService implements UserServiceInterface,
 		}
 	}
 
+	@Override
 	public void removeWorkItem(final WorkItem workItem)
 	{
 		if(null != workItem)
@@ -383,6 +395,7 @@ public class TicketSystemService implements UserServiceInterface,
 		}
 	}
 
+	@Override
 	public List<WorkItem> getWorkItemsFromTeam(final Team team)
 	{
         if(null != team)
@@ -419,6 +432,7 @@ public class TicketSystemService implements UserServiceInterface,
 
 	}
 
+	@Override
 	public User addWorkItemToUser(final User user, final WorkItem workItem)
 	{
         if(null != user)
@@ -456,6 +470,7 @@ public class TicketSystemService implements UserServiceInterface,
         }
 	}
 
+	@Override
 	public List<WorkItem> getAllWorkItems()
 	{
 		try
@@ -469,6 +484,7 @@ public class TicketSystemService implements UserServiceInterface,
 
 	}
 
+	@Override
 	public List<WorkItem> getWorkItemsWithIssue()
 	{
 		try
@@ -482,6 +498,7 @@ public class TicketSystemService implements UserServiceInterface,
 
 	}
 
+	@Override
 	public List<WorkItem> getAllWorkItemsWithStatus(final String status)
 	{
 		if(!status.isEmpty())
@@ -502,6 +519,7 @@ public class TicketSystemService implements UserServiceInterface,
 
 	}
 
+	@Override
 	public List<WorkItem> getWorkItemWithDescriptionLike(final String description)
 	{
 		if (!description.isEmpty())
@@ -521,6 +539,7 @@ public class TicketSystemService implements UserServiceInterface,
 		}
 	}
 
+	@Override
 	public WorkItem changeWorkItemStatus(final WorkItem workItem, final String status)
 	{
 		if (null != workItem)
@@ -549,6 +568,7 @@ public class TicketSystemService implements UserServiceInterface,
 
 	}
 
+	@Override
 	public List<WorkItem> getWorkItemsFromUser(String userID)
 	{
 		if (null != userID)

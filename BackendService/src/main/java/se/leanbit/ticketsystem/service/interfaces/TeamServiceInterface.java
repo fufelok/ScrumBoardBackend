@@ -4,6 +4,7 @@ import java.util.List;
 
 import se.leanbit.ticketsystem.model.Team;
 import se.leanbit.ticketsystem.model.User;
+import se.leanbit.ticketsystem.model.WorkItem;
 
 public interface TeamServiceInterface 
 {
