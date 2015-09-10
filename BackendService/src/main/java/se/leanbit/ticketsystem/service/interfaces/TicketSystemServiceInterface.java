@@ -13,5 +13,5 @@ public interface TicketSystemServiceInterface
                 IssueServiceInterface
 {
     List<WorkItem> getWorkItemsFromTeam(final Team team);
-    User addWorkItemToUser(final User user, final WorkItem workItem);
+    User addWorkItemToUser(final String userID, final WorkItem workItem);
 }

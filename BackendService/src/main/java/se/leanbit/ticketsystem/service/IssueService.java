@@ -35,6 +35,12 @@ public class IssueService implements IssueServiceInterface
         }
     }
 
+    @Override
+    public Issue updateIssue(Issue issue, Long issueID)
+    {
+        return null;
+    }
+
     public Issue updateIssue(final Issue issue)
     {
         try

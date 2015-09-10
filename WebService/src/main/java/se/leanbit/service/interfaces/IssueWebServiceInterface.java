@@ -10,7 +10,7 @@ public interface IssueWebServiceInterface
 
     public Response getIssue(final long id);
 
-    public Response updateIssue(final Issue issue, final Long issueID);
+    public Response updateIssue(final Issue issue, final long id);
 
     public Response removeIssue(final long id);
 }

@@ -1,4 +1,5 @@
 package se.leanbit.ticketsystem.model;
+import com.google.gson.annotations.Expose;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import se.leanbit.ticketsystem.model.abstra.ModelEntity;
@@ -22,9 +23,11 @@ import java.util.*;
 public class Team extends ModelEntity
 {
     @Column(name = "team_name", unique = true)
+    @Expose
     String teamName;
 
     @OneToMany(mappedBy = "team", fetch = FetchType.EAGER)
+    @Expose
     private Collection<User> users;
 
     protected Team(){}

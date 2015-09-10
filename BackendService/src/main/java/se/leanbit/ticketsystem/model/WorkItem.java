@@ -1,6 +1,7 @@
 package se.leanbit.ticketsystem.model;
 
 
+import com.google.gson.annotations.Expose;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import se.leanbit.ticketsystem.model.abstra.ModelEntity;
@@ -10,13 +11,18 @@ import javax.persistence.*;
 @Entity
 public class WorkItem extends ModelEntity
 {
+    @Expose
     private String name;
+    @Expose
     private String description;
+    @Expose
     private String status;
+    @Expose
     private int priority;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(unique = false)
+    @Expose
     private Issue issue;
 
     protected WorkItem(){}
@@ -122,10 +128,24 @@ public class WorkItem extends ModelEntity
             if (this.getId() == otherWorkItem.getId()
                     && this.name.equals(otherWorkItem.name)
                     && this.description.equals(otherWorkItem.description)
-                    && this.priority == otherWorkItem.priority
-                    && this.issue.equals(otherWorkItem.issue))
+                    && this.priority == otherWorkItem.priority)
             {
-                return true;
+                        if(null != this.issue && null != otherWorkItem.issue)
+                        {
+                            if(this.issue.equals(otherWorkItem.issue))
+                            {
+                                return true;
+                            }
+                            return false;
+                        }
+                        else if(null == this.issue && null == otherWorkItem.issue)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
             }
         }
         return false;

@@ -28,6 +28,11 @@ public class InfraStructureConfig
 	public DataSource dataSource()
 	{
 		HikariConfig config = new HikariConfig();
+		//config.setDriverClassName("org.h2.Driver");
+		//config.setJdbcUrl("jdbc:h2:mem:datajpa");
+		//config.setUsername("root");
+		//config.setPassword("");
+
 		config.setDriverClassName("com.mysql.jdbc.Driver");
 		config.setJdbcUrl("jdbc:mysql://localhost/Leanbit_Ticket_System?characterEncoding=utf8");
 		config.setUsername("leanbit");
@@ -46,6 +51,7 @@ public class InfraStructureConfig
 	public JpaVendorAdapter jpaVendorAdapter()
 	{
 		HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
+		//adapter.setDatabase(Database.H2);
 		adapter.setDatabase(Database.MYSQL);
 		adapter.setGenerateDdl(true);
 
@@ -69,7 +75,8 @@ public class InfraStructureConfig
 		return new Properties()
 		{
 			{
-				setProperty("hibernate.hbm2ddl.auto", "create");
+				//Should re reset the database each time we open a connection?
+				//setProperty("hibernate.hbm2ddl.auto", "create");
 			}
 		};
 	}

@@ -8,7 +8,7 @@ public interface IssueServiceInterface
 
 	public Issue getIssue(final long id);
 
-	public Issue updateIssue(final Issue issue);
+	public Issue updateIssue(Issue issue, Long issueID);
 
 	public void removeIssue(final long id);
 }

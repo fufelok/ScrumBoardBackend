@@ -1,5 +1,7 @@
 package se.leanbit.ticketsystem.model.abstra;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
@@ -9,10 +11,11 @@ public abstract class ModelEntity
 {
 	@Id
 	@GeneratedValue
+	@Expose
 	private long id;
 	
 	protected ModelEntity(){}
-	public ModelEntity(Long id)
+	public ModelEntity(long id)
 	{
 		this.id = id;
 	}

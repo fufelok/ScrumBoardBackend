@@ -1,4 +1,5 @@
 package se.leanbit.ticketsystem.model;
+import com.google.gson.annotations.Expose;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import se.leanbit.ticketsystem.exception.ModelException;
@@ -23,22 +24,35 @@ import java.util.*;
 public class User extends ModelEntity
 {
     @Column(name = "user_id", unique = true)
+    @Expose
     private String userID;
+
     @Column(name = "user_name")
+    @Expose
     private String userName;
+
     @Column(name = "first_name")
+    @Expose
     private String firstName;
+
     @Column(name = "last_name")
+    @Expose
     private String lastName;
+
     @Column
+    @Expose
     private String password;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Team team;
 
+    @Expose
+    private String teamName;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "User_Workitems")
     @MapKeyColumn(name = "ID")
+    @Expose
     private Map<String, WorkItem> workItems;
 
 
@@ -131,6 +145,7 @@ public class User extends ModelEntity
         }
         */
         this.team = team;
+        this.teamName = this.team.getTeamName();
     }
 
     public void addWorkItem(final WorkItem workItem)

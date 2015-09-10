@@ -1,5 +1,6 @@
 package se.leanbit.ticketsystem.model;
 
+import com.google.gson.annotations.Expose;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import se.leanbit.ticketsystem.model.abstra.ModelEntity;
@@ -12,8 +13,11 @@ import java.util.UUID;
 @Entity
 public class Issue extends ModelEntity
 {
+    @Expose
     private String name;
+    @Expose
     private String description;
+    @Expose
     private int priority;
 
     protected Issue(){}
