@@ -13,7 +13,7 @@ public interface WorkItemWebServiceInterface
 
     public Response updateWorkItem(final WorkItem workItem);
 
-    public Response removeWorkItem(final WorkItem workItem);
+    public Response removeWorkItem(final String workItem);
 
     public Response getAllWorkItems();
 
@@ -23,5 +23,5 @@ public interface WorkItemWebServiceInterface
 
     public Response getWorkItemWithDescriptionLike(final String description);
 
-    public Response changeWorkItemStatus(WorkItem workItem, final String status);
+    public Response changeWorkItemStatus(final String workItem, final String status);
 }

@@ -12,5 +12,5 @@ public interface SystemServiceInterface extends
         IssueWebServiceInterface
 {
     Response getWorkItemsFromTeam(final Team team);
-    Response addWorkItemToUser(final User user, final WorkItem workItem);
+    Response addWorkItemToUser(final WorkItem workItem, final String userID);
 }

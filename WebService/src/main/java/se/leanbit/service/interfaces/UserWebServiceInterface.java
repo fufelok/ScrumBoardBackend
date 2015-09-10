@@ -26,7 +26,7 @@ public interface UserWebServiceInterface
 
     public Response getWorkItemsFromUser(final String userID);
 
-    public Response getUsersWithWorkItem(final WorkItem workItem);
+    public Response getUsersWithWorkItem(final String workItem);
 
     public Response getAllUsers();
 }
