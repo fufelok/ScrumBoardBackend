@@ -2,15 +2,30 @@ package se.leanbit.ticketsystem.model;
 
 
 import com.google.gson.annotations.Expose;
+import com.sun.istack.internal.NotNull;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import se.leanbit.ticketsystem.model.abstra.ModelEntity;
+
+
+
+import java.util.Date;
 
 import javax.persistence.*;
 
 @Entity
 public class WorkItem extends ModelEntity
 {
+	@CreatedDate
+	 private Date createdDate;
+
+	@LastModifiedDate
+	private Date modifiedDate;
+	
     @Expose
     private String name;
     @Expose

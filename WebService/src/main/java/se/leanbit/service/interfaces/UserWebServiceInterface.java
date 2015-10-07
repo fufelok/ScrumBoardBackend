@@ -28,5 +28,5 @@ public interface UserWebServiceInterface
 
     public Response getUsersWithWorkItem(final String workItem);
 
-    public Response getAllUsers();
+    public Response getAllUsers(int page, int amount);
 }

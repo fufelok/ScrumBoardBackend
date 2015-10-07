@@ -1,7 +1,12 @@
 package se.leanbit.ticketsystem.model;
 import com.google.gson.annotations.Expose;
+import com.sun.istack.internal.NotNull;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import se.leanbit.ticketsystem.exception.ModelException;
 import se.leanbit.ticketsystem.model.abstra.ModelEntity;
 
@@ -19,6 +24,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.*;
+import java.util.Date;
 
 @Entity
 public class User extends ModelEntity
@@ -26,6 +32,12 @@ public class User extends ModelEntity
     @Column(name = "user_id", unique = true)
     @Expose
     private String userID;
+    
+	@CreatedDate
+	 private Date createdDate;
+
+	@LastModifiedDate
+	private Date modifiedDate;
 
     @Column(name = "user_name")
     @Expose

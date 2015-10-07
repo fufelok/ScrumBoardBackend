@@ -5,6 +5,7 @@ import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -19,12 +20,31 @@ import com.zaxxer.hikari.HikariDataSource;
 import java.util.Properties;
 
 @Configuration
+@EnableJpaAuditing
 @EnableJpaRepositories("se.leanbit.ticketsystem.repository")
 @EnableTransactionManagement
 public class InfraStructureConfig
 {
 
 	@Bean
+	LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+
+		HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
+		adapter.setDatabase(Database.MYSQL);
+		adapter.setGenerateDdl(true);
+
+		LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
+		factoryBean.setPackagesToScan(getClass().getPackage().getName());
+		factoryBean.setMappingResources("META-INF/orm.xml");
+		factoryBean.setJpaVendorAdapter(adapter);
+		factoryBean.setDataSource(dataSource);
+
+		return factoryBean;
+	}
+
+
+	@Bean
+	
 	public DataSource dataSource()
 	{
 		HikariConfig config = new HikariConfig();
@@ -34,9 +54,9 @@ public class InfraStructureConfig
 		//config.setPassword("");
 
 		config.setDriverClassName("com.mysql.jdbc.Driver");
-		config.setJdbcUrl("jdbc:mysql://localhost/Leanbit_Ticket_System?characterEncoding=utf8");
-		config.setUsername("leanbit");
-		config.setPassword("theone92");
+		config.setJdbcUrl("jdbc:mysql://localhost:3307/FirstDB");
+		config.setUsername("root");
+		config.setPassword("");
 
 		return new HikariDataSource(config);
 	}

@@ -2,6 +2,9 @@ package se.leanbit.ticketsystem.service.interfaces;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
+
 import se.leanbit.ticketsystem.model.User;
 import se.leanbit.ticketsystem.model.WorkItem;
 
@@ -27,5 +30,7 @@ public interface UserServiceInterface
 
 	public List<User> getUsersWithWorkItem(final WorkItem workItem);
 
-	public List<User> getAllUsers();
+//	public List<User> getAllUsers();
+	
+	public Page<User> getAllUsers(int page, int amount);
 }

@@ -1,12 +1,18 @@
 package se.leanbit.ticketsystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort.Direction;
+
 import se.leanbit.ticketsystem.exception.UserServiceException;
 import se.leanbit.ticketsystem.model.User;
 import se.leanbit.ticketsystem.model.WorkItem;
 import se.leanbit.ticketsystem.repository.UserRepository;
 import se.leanbit.ticketsystem.service.interfaces.UserServiceInterface;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,7 +136,7 @@ public class UserService implements UserServiceInterface
 	{
 		try
 		{
-			List<User> users = getAllUsers();
+			Page<User> users = getAllUsers(0, 1000);
 			List<User> usersWithItem = new ArrayList<>();
 
 			for (User user : users)
@@ -151,7 +157,7 @@ public class UserService implements UserServiceInterface
 		}
 	}
 
-	public List<User> getAllUsers()
+	/*public List<User> getAllUsers()
 	{
 		try
 		{
@@ -162,4 +168,31 @@ public class UserService implements UserServiceInterface
 			throw new UserServiceException("UserService: Could not getAllUsers!", exception);
 		}
 	}
+	*/
+	public Page<User> getAllUsers(int page, int amount)
+	{
+		try
+		{
+			return (Page<User>) userRepository.findAll(new PageRequest(page, amount));
+		}
+		catch (final Exception exception)
+		{
+			throw new UserServiceException("UserService: Could not getAllUsers!", exception);
+		}
+	}
+
+
+
+/*	public List<User> getAllUsersByPage()Slice
+	{
+		try
+		{
+			return (List<User>) userRepository.getAllUsersByPage(new PageRequest(0.2,Direction.DESC), null);
+		}
+		catch (final Exception exception)
+		{
+			throw new UserServiceException("UserService: Could not getAllUsers!", exception);
+		}
+	}
+	*/
 }

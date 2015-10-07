@@ -1,6 +1,9 @@
 package se.leanbit.ticketsystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
+
 import se.leanbit.ticketsystem.exception.*;
 import se.leanbit.ticketsystem.model.Issue;
 import se.leanbit.ticketsystem.model.Team;
@@ -205,11 +208,11 @@ public class TicketSystemService implements TicketSystemServiceInterface
 	}
 
 	@Override
-	public List<User> getAllUsers()
+	public Page<User> getAllUsers(int page, int amount)
 	{
 		try
 		{
-			return userService.getAllUsers();
+			return userService.getAllUsers( page, amount);
 		} catch (final UserServiceException exception)
 		{
 			throw new TicketSystemServiceException("TicketSystemService: Cannot getAllUsers!", exception);

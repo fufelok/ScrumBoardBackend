@@ -1,9 +1,14 @@
 package se.leanbit.ticketsystem.repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 import se.leanbit.ticketsystem.model.User;
 import org.springframework.data.repository.CrudRepository;
+
 
 import java.util.List;
 
@@ -28,4 +33,9 @@ public interface UserRepository extends CrudRepository<User, Long>
     @Modifying
     @Query("delete from User u where u.userID = ?1")
     void remove(final String userID);
+    
+    //Pageable
+    Page<User>  findAll(Pageable pageable);
+    
+
 }
